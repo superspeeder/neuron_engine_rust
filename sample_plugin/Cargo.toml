@@ -1,0 +1,11 @@
+[package]
+name = "sample_plugin"
+version = "0.1.0"
+edition = "2024"
+
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies]
+neuron_script_api = { path = "../components/neuron_script_api" }
+log = "0.4.27"

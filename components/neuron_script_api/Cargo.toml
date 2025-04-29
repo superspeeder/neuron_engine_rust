@@ -1,0 +1,9 @@
+[package]
+name = "neuron_script_api"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+neuron_script_api_procmacro = { path = "../neuron_script_api_procmacro" }
+neuron_common = { path = "../neuron_common" }
+log = { version = "0.4.27", features = ["std"] }

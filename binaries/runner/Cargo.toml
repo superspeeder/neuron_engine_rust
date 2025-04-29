@@ -1,0 +1,12 @@
+[package]
+name = "runner"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+neuron_runtime = { path = "../../components/neuron_runtime" }
+neuron_common = { path = "../../components/neuron_common" }
+serde = "1.0.219"
+toml = "0.8.22"
+#env_logger = "0.11.8"
+pretty_env_logger = "0.5.0"

@@ -1,0 +1,14 @@
+[package]
+name = "neuron_runtime"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+neuron_script_api = { path = "../neuron_script_api" }
+neuron_common = { path = "../neuron_common" }
+hashbrown = "0.15.2"
+parking_lot = "0.12.3"
+toml = "0.8.22"
+libloading = "0.8.6"
+thiserror = "2.0.12"
+log = "0.4.27"
