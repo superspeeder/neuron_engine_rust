@@ -1224,6 +1224,7 @@ dependencies = [
  "libloading",
  "log",
  "neuron_common",
+ "neuron_engine",
  "neuron_script_api",
  "parking_lot",
  "thiserror 2.0.12",

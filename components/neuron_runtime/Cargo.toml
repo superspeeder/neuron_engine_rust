@@ -6,6 +6,7 @@ edition = "2024"
 [dependencies]
 neuron_script_api = { path = "../neuron_script_api" }
 neuron_common = { path = "../neuron_common" }
+neuron_engine = { path = "../../" }
 hashbrown = "0.15.2"
 parking_lot = "0.12.3"
 toml = "0.8.22"

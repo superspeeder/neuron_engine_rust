@@ -1,3 +1,3 @@
 [plugins]
-sample_plugin = { binary_path = "target/debug/sample_plugin.dll", assets_path = "sample_run/assets/" }
+sample_plugin = { binary_path = ["target/debug/sample_plugin.dll", "target/debug/libsample_plugin.so"], assets_path = "sample_run/assets/" }
 

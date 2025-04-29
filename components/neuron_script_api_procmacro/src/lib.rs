@@ -11,7 +11,7 @@ use syn::LitStr;
 /// You can only use this on **one** function within a single plugin shared library.
 ///
 #[proc_macro_attribute]
-pub fn plugin_entry(attr: TokenStream, item: TokenStream) -> TokenStream {
+pub fn plugin_entry(_attr: TokenStream, item: TokenStream) -> TokenStream {
     let item = syn::parse_macro_input!(item as syn::ItemFn);
 
     let fn_ident = item.sig.ident.clone();

@@ -6,6 +6,7 @@ use neuron_script_api::plugin::{
 };
 use std::cell::RefCell;
 use std::collections::HashMap;
+use std::error::Error;
 use thiserror::Error;
 
 #[derive(Debug, Copy, Clone, Eq, PartialEq)]
@@ -33,6 +34,9 @@ pub struct Runtime {
 pub enum PluginConstructionError {
     #[error(transparent)]
     LibraryLoadingError(#[from] libloading::Error),
+
+    #[error("No valid library path")]
+    NoValidLibraryPath,
 }
 
 impl Runtime {
@@ -40,7 +44,19 @@ impl Runtime {
         &mut self,
         spec: PluginSpecification,
     ) -> Result<&'static str, PluginConstructionError> {
-        let library = unsafe { libloading::Library::new(spec.binary_path)? };
+        let mut bpath: Option<String> = None;
+        for bp in spec.binary_path.iter() {
+            if std::fs::exists(bp).unwrap_or(false) {
+                bpath = Some(bp.clone());
+                break;
+            }
+        }
+        if bpath == None {
+            return Err(PluginConstructionError::NoValidLibraryPath);
+        }
+
+        let library = unsafe { libloading::Library::new(bpath.unwrap_unchecked())? };
+
         let plugin = unsafe {
             let mut creation_context = PluginCreationContext {
                 logger: log::logger(),
@@ -77,17 +93,18 @@ impl Runtime {
             return true;
         }
 
-        plugin.plugin.borrow_mut().load(PluginLoadingContext {
-            runtime: self,
-        });
+        plugin
+            .plugin
+            .borrow_mut()
+            .load(PluginLoadingContext { runtime: self });
         self.plugin_registry.get_mut(plugin_name).unwrap().state = PluginState::Loaded;
         true
     }
 
-    pub fn new() -> Self {
-        Self {
+    pub fn new() -> Result<Self, Box<dyn Error>> {
+        Ok(Self {
             plugin_registry: HashMap::new(),
-        }
+        })
     }
 
     pub fn construct_all(
@@ -117,9 +134,7 @@ impl Runtime {
                         .unwrap_unchecked()
                         .plugin
                         .borrow_mut()
-                        .load(PluginLoadingContext {
-                            runtime: self,
-                        });
+                        .load(PluginLoadingContext { runtime: self });
                     self.plugin_registry.get_mut(name).unwrap_unchecked().state =
                         PluginState::Loaded;
                     debug!("Loaded plugin {}", name);
